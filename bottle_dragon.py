@@ -28,4 +28,18 @@ def select_dragon():
     # First string in curly braces is route.
     return bottle.template('dragon_selection', {"dragon":person})
 
+@bottle.get('/update_dragon')
+def update_dragon():
+  dragon = bottle.request.forms.get('dragon_name')
+  dragon_name = str(dragon)
+  person      = db.name.find_one({'name': dragon_name})
+  if ( person == None or person == ""):
+    return "No Dragon found."
+  else:
+    return bottle.template("update_dragon", {'dragon':person})
+
+@bottle.post('/upsert_dragon')
+def upsert_dragon():
+  return "No methods yet."
+
 bottle.run(host='localhost', port = 8082, reloader = True, debug = True)

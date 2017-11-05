@@ -14,7 +14,7 @@
   {{ k }}-{{ v }}  
 % end
 
-<form action='upsert_dragon', method='POST'>
+<form action='update_dragon', method='POST'>
 <input type='text' name='search_name' value="{{dragon['name']}}">
 <input type='submit' value='Update?'>
 </form>

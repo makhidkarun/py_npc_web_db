@@ -1,13 +1,20 @@
+# Many code ideas, and pretty much all the best ones, come from
+# the MongoDB University M101P on-line class. Highly recommended!
+# https://university.mongodb.com/courses/M101P/about
+
+
 import bottle
 import pymongo
 import sys
 
+# Not sure on this.
 #from bottle import Bottle, debug,  post, route, run 
 
 # Using "app = Bottle() is supposed to be a best practice.
 # Not getting it yet.
-#app = Bottle()
+# app = Bottle()
 
+# When does the connection close? Should closure be explicit?
 connection = pymongo.MongoClient('localhost', 27017)
 db = connection.dragons
 db_name = db.dragons
@@ -29,11 +36,11 @@ def select_dragon():
     # First string in curly braces is route.
     return bottle.template('dragon_selection', {"dragon":person})
 
-@bottle.get('/update_dragon')
+@bottle.post('/update_dragon')
 def update_dragon():
-  dragon = bottle.request.forms.get('dragon_name')
-  dragon_name = str(dragon)
-  person      = db_name.find_one({'name': dragon_name})
+  dragon = bottle.request.forms.get('search_name')
+  search_name = str(dragon)
+  person      = db_name.find_one({'name': search_name})
   if ( person == None or person == ""):
     return "No Dragon found."
   else:
@@ -48,14 +55,17 @@ def upsert_dragon():
     return "No Dragon found."
   else:
     name        = bottle.request.forms.get('dragon_name')
-    upp         = bottle.request.forms.get('upp')
+    upp         = bottle.request.forms.get('dragon_upp')
     try:
       result = db_name.update_one({'name': search_name},
                 {'$set': {'name':name, 'upp':upp}})
+      person        = db_name.find_one({'name': search_name})
     except:
       print("Error on update.")
       print(sys.exec_info()[0])
 
-  return "Check the database."
+  return bottle.template('dragon_selection', {"dragon":person})
+
+## Run stuff
 
 bottle.run(host='localhost', port = 8082, reloader = True, debug = True)

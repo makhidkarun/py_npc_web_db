@@ -5,6 +5,7 @@
 <title>Update Dragon</title>
 </head>
 <form action='upsert_dragon', method='POST'>
+  <input type='hidden' name='search_name' value="{{dragon['name']}}">
 <p>Name: 
   <input type='text' name='dragon_name' value="{{dragon['name']}}">
 <p>UPP:

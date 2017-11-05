@@ -1,5 +1,6 @@
 import bottle
 import pymongo
+import sys
 
 #from bottle import Bottle, debug,  post, route, run 
 
@@ -32,7 +33,7 @@ def select_dragon():
 def update_dragon():
   dragon = bottle.request.forms.get('dragon_name')
   dragon_name = str(dragon)
-  person      = db.name.find_one({'name': dragon_name})
+  person      = db_name.find_one({'name': dragon_name})
   if ( person == None or person == ""):
     return "No Dragon found."
   else:
@@ -40,6 +41,21 @@ def update_dragon():
 
 @bottle.post('/upsert_dragon')
 def upsert_dragon():
-  return "No methods yet."
+  dragon        = bottle.request.forms.get('search_name')
+  search_name   = str(dragon)
+  person        = db_name.find_one({'name': search_name})
+  if ( person == None or person == ""):
+    return "No Dragon found."
+  else:
+    name        = bottle.request.forms.get('dragon_name')
+    upp         = bottle.request.forms.get('upp')
+    try:
+      result = db_name.update_one({'name': search_name},
+                {'$set': {'name':name, 'upp':upp}})
+    except:
+      print("Error on update.")
+      print(sys.exec_info()[0])
+
+  return "Check the database."
 
 bottle.run(host='localhost', port = 8082, reloader = True, debug = True)

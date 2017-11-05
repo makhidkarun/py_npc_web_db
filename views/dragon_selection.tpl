@@ -15,7 +15,7 @@
 % end
 
 <form action='upsert_dragon', method='POST'>
-<input type='text' name='dragon_name' value="{{dragon['name']}}">
+<input type='text' name='search_name' value="{{dragon['name']}}">
 <input type='submit' value='Update?'>
 </form>
 </body>
